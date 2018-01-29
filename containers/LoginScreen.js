@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   Linking
 } from 'react-native';
+import { connect } from "react-redux"
 
+import { storeToken } from '../actions/account'
 import Colors from '../constants/Colors'
 import { authenticate } from '../api/nprAPI'
 
@@ -17,52 +19,27 @@ class LoginScreen extends React.Component {
     header: null,
   };
 
-  state = {
-    redirectData: null,
-  };
-
   _handleRedirect = event => {
-    console.log("_handleRedirect")
-
     WebBrowser.dismissBrowser();
-
-    let query = event.url.replace(Constants.linkingUri, '');
-    let data;
-    if (query) {
-      data = qs.parse(query);
-    } else {
-      data = null;
+    const query = event.url.replace(Constants.linkingUri, '');
+    const data = query ? qs.parse(query) : null;
+    if(data && data.token) {
+      this.props.storeToken(data.token)
     }
-    console.log("RedirectData: ", data)
-    this.setState({ redirectData: data });
   };
 
   _openWebBrowserAsync = async () => {
     this._addLinkingListener();
-    console.log("waiting on result for : ", `[${Constants.linkingUri}]`, `[${encodeURIComponent(Constants.linkingUri)}]`)
-
-    let result = await WebBrowser.openBrowserAsync(`http://localhost:3000/auth?linkingUri=${encodeURIComponent(Constants.linkingUri)}`);
-    console.log("Result is: ", result)
+    const result = await WebBrowser.openBrowserAsync(`http://localhost:3000/auth?linkingUri=${encodeURIComponent(Constants.linkingUri)}`);
     this._removeLinkingListener();
-    this.setState({ result });
   };
 
   _addLinkingListener = () => {
-    console.log("_addLinkingListener")
-
     Linking.addEventListener('url', this._handleRedirect);
   };
 
   _removeLinkingListener = () => {
     Linking.removeEventListener('url', this._handleRedirect);
-  };
-
-  _maybeRenderRedirectData = () => {
-    if (!this.state.redirectData) {
-      return;
-    }
-
-    return <Text>{JSON.stringify(this.state.redirectData)}</Text>;
   };
 
   render() {
@@ -94,4 +71,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen
+export default connect(
+  null,
+  {
+    storeToken
+  }
+)(LoginScreen)
