@@ -2,14 +2,31 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  Button
 } from 'react-native';
 
 import Colors from '../constants/Colors'
 
 class NewsScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: 'News',
+  static navigationOptions = ({ navigation }) => {
+    // headerTitle: 'News',
+    // headerRight: (
+    //   <Button
+    //     title={'Logout'}
+    //     onPress={() => setParams({ mode: isInfo ? 'none' : 'info' })}
+    //   />
+    // ),
+    const {state: { params: { logout }}} = navigation
+    return {
+      title: 'News',
+      headerRight: <Button title={"Logout"} onPress={() => {
+        console.log("Hmmm? presed", navigation)
+        // navigation.dispatch(logout)
+        logout()
+
+      }} />
+    }
   };
 
   render() {

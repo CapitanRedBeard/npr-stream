@@ -9,6 +9,7 @@ import NewsScreen from './containers/NewsScreen'
 import configureStore from './configureStore'
 import Colors from './constants/Colors'
 import Loader from './components/Loader'
+import { ActionTypes } from "./constants/Types"
 
 let { store, persistor } = configureStore()
 
@@ -24,6 +25,11 @@ const RootNavigationLoggedIn = StackNavigator(
   {
     NewsScreen: {
       screen: NewsScreen,
+    }
+  },
+  {
+    initialRouteParams: {
+      logout: () => { store.dispatch({type: ActionTypes.RESET}) }
     }
   }
 );

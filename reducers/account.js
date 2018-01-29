@@ -9,6 +9,9 @@ export default (state = initialState, action) => {
     case ActionTypes.STORE_TOKEN: {
       return {...state, token: action.token}
     }
+    case ActionTypes.RESET: {
+      return initialState
+    }
     default: {
       return state
     }
