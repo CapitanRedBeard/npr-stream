@@ -1,13 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Provider } from 'react-redux'
-import { connect } from "react-redux"
+import { Provider, connect } from 'react-redux'
+import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import LoginScreen from './containers/LoginScreen'
 import NewsScreen from './containers/NewsScreen'
 import configureStore from './configureStore'
 import Colors from './constants/Colors'
+import Loader from './components/Loader'
+
+let { store, persistor } = configureStore()
 
 const RootNavigationNotLoggedIn = StackNavigator(
   {
@@ -35,8 +38,10 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Provider store={configureStore()}>
-          <RootNavigation />
+        <Provider store={store}>
+          <PersistGate loading={Loader} persistor={persistor}>
+            <RootNavigation />
+          </PersistGate>
         </Provider>
       </View>
     );
