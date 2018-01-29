@@ -1,5 +1,5 @@
 import { ActionTypes } from "../constants/Types"
-import { fetchNewsAPI } from '../api/newsAPI'
+import { fetchNewsAPI } from '../api/nprApi'
 
 function updateNews(news) {
   return {
