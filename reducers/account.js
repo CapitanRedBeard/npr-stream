@@ -7,7 +7,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.STORE_TOKEN: {
-      return {...state, token}
+      return {...state, token: action.token}
     }
     default: {
       return state

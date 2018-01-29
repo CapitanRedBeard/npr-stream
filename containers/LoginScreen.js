@@ -43,6 +43,8 @@ class LoginScreen extends React.Component {
   };
 
   render() {
+    const { account } = this.props
+
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this._openWebBrowserAsync}>
@@ -72,7 +74,9 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  null,
+  ({account}) => ({
+    account
+  }),
   {
     storeToken
   }
