@@ -20,7 +20,9 @@ export default class AudioControlBar extends React.Component {
     if(didJustFinish) {
       this.props.onFinished()
     }
-    this.setState({progress: positionMillis / durationMillis})
+    if (this.refs.audioControlBar) {
+      this.setState({progress: positionMillis / durationMillis})
+    }
   }
 
   _playAudio = async ({links}) => {
@@ -77,7 +79,7 @@ export default class AudioControlBar extends React.Component {
     const {progress} = this.state
 
     return (
-      <View style={[styles.container, {height}]}>
+      <View ref="audioControlBar" style={[styles.container, {height}]}>
         <ProgressViewIOS
           progress={progress}
           progressTintColor={Colors.tintColor}
