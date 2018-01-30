@@ -19,7 +19,7 @@ export default function Loader({attributes, links, onSelect, isPlaying}) {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => onSelect()}>
+      onPress={onSelect}>
       <View style={styles.wrapper}>
         <View key="NameContainer" style={styles.detailsContainer}>
           <Text style={styles.title}>

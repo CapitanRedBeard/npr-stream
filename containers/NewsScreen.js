@@ -62,7 +62,7 @@ class NewsScreen extends React.Component {
     const { news } = this.props
     const { currentAudio, isPlaying } = this.state
     const playingAudio = isPlaying ? currentAudio.attributes.uid : null
-    console.log("State: ", this.state, playingAudio)
+    console.log("State: ", Boolean(currentAudio))
 
     return (
       <View style={styles.container}>
@@ -77,7 +77,12 @@ class NewsScreen extends React.Component {
           /> : <Loader/>
         }
         {
-          currentAudio && <AudioControlBar {...currentAudio} isPlaying={isPlaying}/>
+          Boolean(currentAudio) &&
+            <AudioControlBar
+              {...currentAudio}
+              isPlaying={isPlaying}
+              onSelect={() => this.selectAudioItem(currentAudio)}
+            />
         }
       </View>
     )

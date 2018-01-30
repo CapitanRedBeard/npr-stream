@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import { Audio } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors'
 
@@ -47,10 +48,34 @@ export default class AudioControlBar extends React.Component {
   }
 
   render() {
-    const {attributes} = this.props
+    const {attributes, isPlaying, onSelect} = this.props
       return (
         <View style={styles.container}>
-          <Text style={styles.title}>{attributes.title}</Text>
+          <Text
+            style={styles.title}
+            numberOfLines={1}
+            ellipsizeMode='tail'
+          >{attributes.title}</Text>
+          <TouchableHighlight
+            key="IconContainer"
+            style={styles.symbolContainer}
+            onPress={onSelect}>
+            {
+              isPlaying ?
+                <Ionicons
+                  name="ios-pause-outline"
+                  size={22}
+                  style={styles.itemIcon}
+                  color={Colors.tintColor}
+                /> :
+                <Ionicons
+                  name="ios-play-outline"
+                  size={22}
+                  style={styles.itemIcon}
+                  color={Colors.tintColor}
+                />
+            }
+          </TouchableHighlight>
         </View>
       );
   }
@@ -65,14 +90,22 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     height: 70,
-    borderWidth: 1,
-    borderColor: "red",
     justifyContent: "center",
-    alignItems: "stretch",
-    backgroundColor: Colors.backgroundColor,
+    alignItems: "center",
+    backgroundColor: Colors.backgroundColorSecondary,
   },
   title: {
+    flex: 1,
     fontSize: 16,
-    color: Colors.textValue
-  }
+    color: Colors.textValue,
+    marginHorizontal: 10,
+  },
+  symbolContainer: {
+    width: 50,
+    marginHorizontal: 10,
+    flex: 0,
+    flexShrink: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
