@@ -1,13 +1,13 @@
 import { ActionTypes } from "../constants/Types"
-import { fetchNewsAPI } from '../api/nprApi'
+import { fetchNewsAPI } from '../api/nprAPI'
 
-function updateNews(news) {
+function updateRecommendations(recommendations) {
   return {
     type: ActionTypes.FETCH_NEWS,
-    news
+    recommendations
   }
 }
 
-export function fetchNews() {
-  return async dispatch =>  dispatch(updateNews(await fetchNewsAPI()))
+export function fetchRecommendations(token) {
+  return async dispatch => dispatch(updateRecommendations(await fetchNewsAPI(token)))
 }

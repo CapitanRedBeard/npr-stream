@@ -8,23 +8,20 @@ import {
 import { connect } from "react-redux"
 
 import Colors from '../constants/Colors'
-import { fetchNewsAPI } from '../api/nprAPI'
+import { fetchRecommendations } from '../actions/news'
 
 class NewsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const {state: { params: { logout }}} = navigation
     return {
       title: 'News',
-      headerRight: <Button title={"Logout"} onPress={() => {
-        console.log("Hmmm? presed", navigation)
-        logout()
-      }} />
+      headerRight: <Button title={"Logout"} onPress={logout} />
     }
   };
 
   componentWillMount() {
-    const { account: { token }} = this.props
-    fetchNewsAPI(token)
+    const { account: { token }, fetchRecommendations} = this.props
+    fetchRecommendations(token)
   }
 
   render() {
@@ -54,7 +51,11 @@ const styles = StyleSheet.create({
 
 
 export default connect(
-  ({account}) => ({
-    account
-  })
+  ({account, news}) => ({
+    account,
+    news
+  }),
+  {
+    fetchRecommendations
+  }
 )(NewsScreen)

@@ -15,10 +15,12 @@ export async function fetchNewsAPI(token) {
   const response = await fetch(recommendationsUri, {
     method: 'GET',
     headers: new Headers({
-      'Authorization': token
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     })
   })
-  console.log("Response: ", response)
+
+  console.log("Response: ", `Bearer ${token}`)
   if(response.status === HTTPCodes.OK) {
     return response.json()
   }
