@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors'
 import { Months } from '../constants/Types'
 
-export default function Loader({attributes, links, onSelect}) {
+export default function Loader({attributes, links, onSelect, isPlaying}) {
   const itemDate = new Date(attributes.date)
   const imageSrc = links.image && links.image[0] && links.image[0].href
 
@@ -36,12 +36,21 @@ export default function Loader({attributes, links, onSelect}) {
           </Text>
         </View>
         <View key="IconContainer" style={styles.symbolContainer}>
-          <Ionicons
-            name="ios-play-outline"
-            size={48}
-            style={styles.itemIcon}
-            color={Colors.tintColor}
-          />
+          {
+            isPlaying ?
+              <Ionicons
+                name="ios-pause-outline"
+                size={48}
+                style={styles.itemIcon}
+                color={Colors.tintColor}
+              /> :
+              <Ionicons
+                name="ios-play-outline"
+                size={48}
+                style={styles.itemIcon}
+                color={Colors.tintColor}
+              />
+          }
         </View>
       </View>
     </TouchableOpacity>

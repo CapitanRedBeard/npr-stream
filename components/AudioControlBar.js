@@ -14,6 +14,7 @@ export default class AudioControlBar extends React.Component {
     if( links && links.audio) {
       const audioFile = links.audio[0].href
       try {
+        await this.soundObject.unloadAsync()
         await this.soundObject.loadAsync({ uri: audioFile });
         await this.soundObject.playAsync();
       } catch (error) {
@@ -22,9 +23,27 @@ export default class AudioControlBar extends React.Component {
     }
   }
 
+  async _pauseAudio() {
+    try {
+      await this.soundObject.pauseAsync()
+    } catch (error) {
+      console.log("Something went wrong with pausing", error)
+    }
+  }
+
   componentWillMount() {
     const { audioFile } = this.props
     this._playAudio(this.props)
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.isPlaying) {
+      this._pauseAudio()
+    }
+    if(nextProps.attributes && nextProps.attributes.uid !== this.props.attributes.uid) {
+      this._playAudio(nextProps)
+    }
   }
 
   render() {

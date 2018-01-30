@@ -24,7 +24,8 @@ class NewsScreen extends React.Component {
   };
 
   state = {
-    currentAudio: null
+    currentAudio: null,
+    isPlaying: false
   }
 
   componentWillMount() {
@@ -33,12 +34,25 @@ class NewsScreen extends React.Component {
   }
 
   selectAudioItem(item) {
-    this.setState({currentAudio: item})
+    const { currentAudio, isPlaying } = this.state
+    if(currentAudio && currentAudio.attributes.uid === item.attributes.uid) {
+      this.setState({isPlaying: !isPlaying})
+      console.log("Pause/Play")
+    }else {
+      this.setState({currentAudio: item, isPlaying: true})
+      console.log("New Audio")
+    }
   }
 
   _renderListItem = ({item}) => {
+    const { currentAudio, isPlaying } = this.state
+    const currentlyPlaying = Boolean(isPlaying && item.attributes.uid === currentAudio.attributes.uid)
+    console.log("Is Playing: ", currentlyPlaying, currentAudio && currentAudio.attributes.uid, item.attributes.uid)
     return (
-      <NewsItem {...item} onSelect={() => this.selectAudioItem(item)}/>
+      <NewsItem
+        {...item}
+        onSelect={() => this.selectAudioItem(item)}
+        isPlaying={currentlyPlaying} />
     )
   }
 
@@ -46,21 +60,24 @@ class NewsScreen extends React.Component {
 
   render() {
     const { news } = this.props
-    const { currentAudio } = this.state
+    const { currentAudio, isPlaying } = this.state
+    const playingAudio = isPlaying ? currentAudio.attributes.uid : null
+    console.log("State: ", this.state, playingAudio)
 
     return (
       <View style={styles.container}>
-        
+
         {
           Boolean(news.length) ? <FlatList
             keyExtractor={this._keyExtractor}
+            extraData={playingAudio}
             data={this.props.news}
             renderItem={this._renderListItem}
             initialNumToRender={20}
           /> : <Loader/>
         }
         {
-          currentAudio && <AudioControlBar {...currentAudio}/>
+          currentAudio && <AudioControlBar {...currentAudio} isPlaying={isPlaying}/>
         }
       </View>
     )
