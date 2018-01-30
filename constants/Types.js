@@ -7,3 +7,5 @@ export const ActionTypes = {
 export const HTTPCodes = {
   OK: 200
 }
+
+export const Months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]

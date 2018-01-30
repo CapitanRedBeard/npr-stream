@@ -3,10 +3,13 @@ import {
   StyleSheet,
   View,
   Text,
-  Button
+  Button,
+  FlatList
 } from 'react-native';
 import { connect } from "react-redux"
 
+import NewsItem from '../components/NewsItem'
+import Loader from '../components/Loader'
 import Colors from '../constants/Colors'
 import { fetchRecommendations } from '../actions/news'
 
@@ -24,12 +27,29 @@ class NewsScreen extends React.Component {
     fetchRecommendations(token)
   }
 
+  _renderListItem = ({item}) => {
+    return (
+      <NewsItem {...item} />
+    )
+  }
+
+  _keyExtractor = (item) => item.href;
+
   render() {
+    console.log("News: ", this.props.news)
+    const { news } = this.props
     return (
       <View style={styles.container}>
-        <Text style={styles.header} key="header" >List of News</Text>
+        {
+          Boolean(news.length) ? <FlatList
+            keyExtractor={this._keyExtractor}
+            data={this.props.news}
+            renderItem={this._renderListItem}
+            initialNumToRender={20}
+          /> : <Loader/>
+        }
       </View>
-    );
+    )
   }
 }
 
