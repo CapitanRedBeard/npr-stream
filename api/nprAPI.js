@@ -5,7 +5,6 @@ const recommendationsUri = 'https://api.npr.org/listening/v2/recommendations'
 
 export async function authenticate() {
   const response = await fetch(authUri)
-  console.log("Response is: ", response)
   if(response.status === HTTPCodes.OK) {
     return response.json()
   }
@@ -19,8 +18,6 @@ export async function fetchNewsAPI(token) {
       'Content-Type': 'application/json'
     })
   })
-
-  console.log("Response: ", `Bearer ${token}`)
   if(response.status === HTTPCodes.OK) {
     return response.json()
   }

@@ -16,7 +16,6 @@ export default class AudioControlBar extends React.Component {
   }
 
   _onPlaybackStatusUpdate = ({didJustFinish, durationMillis, positionMillis}) => {
-    console.log("PlaybackStatus: ", positionMillis, durationMillis)
     if(didJustFinish) {
       this.props.onFinished()
     }

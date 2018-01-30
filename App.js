@@ -60,3 +60,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundColor,
   },
 });
+
+console.disableYellowBox = true;

@@ -39,10 +39,8 @@ class NewsScreen extends React.Component {
     const { currentAudio, isPlaying } = this.state
     if(currentAudio && currentAudio.attributes.uid === item.attributes.uid) {
       this.setState({isPlaying: !isPlaying})
-      console.log("Pause/Play")
     }else {
       this.setState({currentAudio: item, isPlaying: true})
-      console.log("New Audio")
     }
   }
 
@@ -52,8 +50,6 @@ class NewsScreen extends React.Component {
 
     currentAudioIndex = news.findIndex(item => item.attributes.uid === currentAudio.attributes.uid)
     if(currentAudioIndex !== -1)  {
-      console.log("Picking Item", currentAudioIndex + 1 % news.length, news[currentAudioIndex + 1 % news.length])
-
       this.selectAudioItem(news[(currentAudioIndex + 1)% news.length])
     }
   }
@@ -61,7 +57,7 @@ class NewsScreen extends React.Component {
   _renderListItem = ({item}) => {
     const { currentAudio, isPlaying } = this.state
     const currentlyPlaying = Boolean(isPlaying && item.attributes.uid === currentAudio.attributes.uid)
-    console.log("Is Playing: ", currentlyPlaying, currentAudio && currentAudio.attributes.uid, item.attributes.uid)
+
     return (
       <NewsItem
         {...item}
@@ -76,7 +72,6 @@ class NewsScreen extends React.Component {
     const { news } = this.props
     const { currentAudio, isPlaying } = this.state
     const playingAudio = isPlaying ? currentAudio.attributes.uid : null
-    console.log("State: ", Boolean(currentAudio))
     const containerStyles = Boolean(currentAudio) ? [styles.container, {paddingBottom: CONTROLLER_HEIGHT}] : styles.container
 
     return (
