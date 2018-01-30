@@ -32,6 +32,14 @@ export default class AudioControlBar extends React.Component {
     }
   }
 
+  async _resumeAudio() {
+    try {
+      await this.soundObject.playAsync();
+    } catch (error) {
+      console.log("Something went wrong with resuming", error)
+    }
+  }
+
   componentWillMount() {
     const { audioFile } = this.props
     this._playAudio(this.props)
@@ -39,8 +47,12 @@ export default class AudioControlBar extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
+    const {attributes, isPlaying} = this.props
     if(!nextProps.isPlaying) {
       this._pauseAudio()
+    }
+    if(!isPlaying && nextProps.isPlaying) {
+      this._resumeAudio()
     }
     if(nextProps.attributes && nextProps.attributes.uid !== this.props.attributes.uid) {
       this._playAudio(nextProps)
