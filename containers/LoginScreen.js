@@ -31,7 +31,7 @@ class LoginScreen extends React.Component {
 
   _openWebBrowserAsync = async () => {
     this._addLinkingListener();
-    const result = await WebBrowser.openBrowserAsync(`http://localhost:3000/auth?linkingUri=${encodeURIComponent(Constants.linkingUri)}`);
+    const result = await WebBrowser.openBrowserAsync(`https://protected-earth-11100.herokuapp.com/auth?linkingUri=${encodeURIComponent(Constants.linkingUri)}`);
     this._removeLinkingListener();
   };
 
