@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { connect } from "react-redux"
 
+import AudioControlBar from '../components/AudioControlBar'
 import NewsItem from '../components/NewsItem'
 import Loader from '../components/Loader'
 import Colors from '../constants/Colors'
@@ -22,24 +23,34 @@ class NewsScreen extends React.Component {
     }
   };
 
+  state = {
+    currentAudio: null
+  }
+
   componentWillMount() {
     const { account: { token }, fetchRecommendations} = this.props
     fetchRecommendations(token)
   }
 
+  selectAudioItem(item) {
+    this.setState({currentAudio: item})
+  }
+
   _renderListItem = ({item}) => {
     return (
-      <NewsItem {...item} />
+      <NewsItem {...item} onSelect={() => this.selectAudioItem(item)}/>
     )
   }
 
   _keyExtractor = (item) => item.href;
 
   render() {
-    console.log("News: ", this.props.news)
     const { news } = this.props
+    const { currentAudio } = this.state
+
     return (
       <View style={styles.container}>
+        
         {
           Boolean(news.length) ? <FlatList
             keyExtractor={this._keyExtractor}
@@ -47,6 +58,9 @@ class NewsScreen extends React.Component {
             renderItem={this._renderListItem}
             initialNumToRender={20}
           /> : <Loader/>
+        }
+        {
+          currentAudio && <AudioControlBar {...currentAudio}/>
         }
       </View>
     )

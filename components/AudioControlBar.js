@@ -10,22 +10,28 @@ export default class AudioControlBar extends React.Component {
     this.soundObject = new Audio.Sound();
   }
 
-  componentWillMount() {
-    const { audioFile } = this.props
-    try {
-      await this.soundObject.loadAsync(require(audioFile));
-      await this.soundObject.playAsync();
-    } catch (error) {
-      console.log("Something went wrong", error)
+  async _playAudio({links}) {
+    if( links && links.audio) {
+      const audioFile = links.audio[0].href
+      try {
+        await this.soundObject.loadAsync({ uri: audioFile });
+        await this.soundObject.playAsync();
+      } catch (error) {
+        console.log("Something went wrong", error)
+      }
     }
   }
 
+  componentWillMount() {
+    const { audioFile } = this.props
+    this._playAudio(this.props)
+  }
+
   render() {
+    const {attributes} = this.props
       return (
-        <View
-          style={styles.container}
-        >
-          <Text>{title}</Text>
+        <View style={styles.container}>
+          <Text style={styles.title}>{attributes.title}</Text>
         </View>
       );
   }
@@ -33,11 +39,21 @@ export default class AudioControlBar extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     flex: 1,
-    flexGrow: 1,
-    height: 50,
+    flexDirection: "row",
+    height: 70,
+    borderWidth: 1,
+    borderColor: "red",
     justifyContent: "center",
     alignItems: "stretch",
     backgroundColor: Colors.backgroundColor,
   },
+  title: {
+    fontSize: 16,
+    color: Colors.textValue
+  }
 });
