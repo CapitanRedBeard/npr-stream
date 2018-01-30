@@ -14,6 +14,8 @@ import Loader from '../components/Loader'
 import Colors from '../constants/Colors'
 import { fetchRecommendations } from '../actions/news'
 
+const CONTROLLER_HEIGHT = 70
+
 class NewsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const {state: { params: { logout }}} = navigation
@@ -33,7 +35,7 @@ class NewsScreen extends React.Component {
     fetchRecommendations(token)
   }
 
-  selectAudioItem(item) {
+  selectAudioItem = (item) =>{
     const { currentAudio, isPlaying } = this.state
     if(currentAudio && currentAudio.attributes.uid === item.attributes.uid) {
       this.setState({isPlaying: !isPlaying})
@@ -41,6 +43,17 @@ class NewsScreen extends React.Component {
     }else {
       this.setState({currentAudio: item, isPlaying: true})
       console.log("New Audio")
+    }
+  }
+
+  onFinished = () => {
+    const { news } = this.props
+    const { currentAudio } = this.state
+    console.log("onFinished callback", news, currentAudio)
+
+    currentAudioIndex = news.findIndex(item => item.attributes.uid === currentAudio.attributes.uid)
+    if(currentAudioIndex !== -1)  {
+      this.selectAudioItem(news[currentAudioIndex + 1 % news.length])
     }
   }
 
@@ -63,9 +76,10 @@ class NewsScreen extends React.Component {
     const { currentAudio, isPlaying } = this.state
     const playingAudio = isPlaying ? currentAudio.attributes.uid : null
     console.log("State: ", Boolean(currentAudio))
+    const containerStyles = Boolean(currentAudio) ? [styles.container, {paddingBottom: CONTROLLER_HEIGHT}] : styles.container
 
     return (
-      <View style={styles.container}>
+      <View style={containerStyles}>
 
         {
           Boolean(news.length) ? <FlatList
@@ -82,6 +96,8 @@ class NewsScreen extends React.Component {
               {...currentAudio}
               isPlaying={isPlaying}
               onSelect={() => this.selectAudioItem(currentAudio)}
+              onFinished={this.onFinished}
+              height={CONTROLLER_HEIGHT}
             />
         }
       </View>
@@ -95,7 +111,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "stretch",
-    backgroundColor: Colors.backgroundColor,
+    backgroundColor: Colors.backgroundColor
   },
   header: {
     padding: 10,

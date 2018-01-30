@@ -9,9 +9,17 @@ export default class AudioControlBar extends React.Component {
   constructor(props) {
     super(props)
     this.soundObject = new Audio.Sound();
+    this.soundObject.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate)
   }
 
-  async _playAudio({links}) {
+  _onPlaybackStatusUpdate = ({didJustFinish}) => {
+    console.log("PlaybackStatus: ", didJustFinish, this.props)
+    if(didJustFinish) {
+      this.props.onFinished()
+    }
+  }
+
+  _playAudio = async ({links}) => {
     if( links && links.audio) {
       const audioFile = links.audio[0].href
       try {
@@ -24,7 +32,7 @@ export default class AudioControlBar extends React.Component {
     }
   }
 
-  async _pauseAudio() {
+   _pauseAudio = async () => {
     try {
       await this.soundObject.pauseAsync()
     } catch (error) {
@@ -32,7 +40,7 @@ export default class AudioControlBar extends React.Component {
     }
   }
 
-  async _resumeAudio() {
+  _resumeAudio = async () => {
     try {
       await this.soundObject.playAsync();
     } catch (error) {
@@ -60,9 +68,9 @@ export default class AudioControlBar extends React.Component {
   }
 
   render() {
-    const {attributes, isPlaying, onSelect} = this.props
+    const {attributes, isPlaying, onSelect, height} = this.props
       return (
-        <View style={styles.container}>
+        <View style={[styles.container, {height}]}>
           <Text
             style={styles.title}
             numberOfLines={1}
@@ -101,7 +109,6 @@ const styles = StyleSheet.create({
     right: 0,
     flex: 1,
     flexDirection: "row",
-    height: 70,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.backgroundColorSecondary,
