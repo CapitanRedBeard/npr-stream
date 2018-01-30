@@ -6,7 +6,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Linking
+  Linking,
+  Image
 } from 'react-native';
 import { connect } from "react-redux"
 
@@ -47,8 +48,12 @@ class LoginScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this._openWebBrowserAsync}>
-          <Text style={styles.header} key="header" >Login</Text>
+        <Image
+          style={styles.stretch}
+          source={require('../assets/icon.png')}
+        />
+        <TouchableOpacity style={styles.button} onPress={this._openWebBrowserAsync}>
+          <Text style={styles.buttonValue} key="header" >Login With NPR</Text>
 
         </TouchableOpacity>
       </View>
@@ -61,15 +66,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     justifyContent: "center",
-    alignItems: "stretch",
+    alignItems: "center",
     backgroundColor: Colors.backgroundColor,
   },
-  header: {
+  buttonValue: {
     padding: 10,
-    marginTop: 30,
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "600",
-    color: "blue"
+    color: "white",
+    textAlign: "center"
+  },
+  button: {
+    margin: 20,
+    width: 200,
+    borderRadius: 4,
+    backgroundColor: Colors.tintColor
+  },
+  stretch: {
+    width: 150,
+    height: 150
   }
 });
 

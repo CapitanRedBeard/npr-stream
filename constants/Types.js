@@ -3,3 +3,7 @@ export const ActionTypes = {
   STORE_TOKEN: "STORE_TOKEN",
   RESET: "RESET",
 }
+
+export const HTTPCodes = {
+  OK: 200
+}
