@@ -73,7 +73,7 @@ export default class AudioControlBar extends React.Component {
   }
 
   render() {
-    const {attributes, isPlaying, onSelect, height} = this.props
+    const {attributes, isPlaying, onSelect, height, onFinished} = this.props
     const {progress} = this.state
 
     return (
@@ -89,7 +89,7 @@ export default class AudioControlBar extends React.Component {
             ellipsizeMode='tail'
           >{attributes.title}</Text>
           <TouchableOpacity
-            key="IconContainer"
+            key="PlayPauseContainer"
             style={styles.symbolContainer}
             onPress={onSelect}>
             {
@@ -107,6 +107,17 @@ export default class AudioControlBar extends React.Component {
                   color={Colors.tintColor}
                 />
             }
+          </TouchableOpacity>
+          <TouchableOpacity
+            key="SkipContainer"
+            style={styles.symbolContainer}
+            onPress={onFinished}>
+              <Ionicons
+                name="ios-skip-forward-outline"
+                size={32}
+                style={styles.itemIcon}
+                color={Colors.tintColor}
+              />
           </TouchableOpacity>
         </View>
       </View>

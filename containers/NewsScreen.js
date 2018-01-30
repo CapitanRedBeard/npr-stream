@@ -49,11 +49,12 @@ class NewsScreen extends React.Component {
   onFinished = () => {
     const { news } = this.props
     const { currentAudio } = this.state
-    console.log("onFinished callback", news, currentAudio)
 
     currentAudioIndex = news.findIndex(item => item.attributes.uid === currentAudio.attributes.uid)
     if(currentAudioIndex !== -1)  {
-      this.selectAudioItem(news[currentAudioIndex + 1 % news.length])
+      console.log("Picking Item", currentAudioIndex + 1 % news.length, news[currentAudioIndex + 1 % news.length])
+
+      this.selectAudioItem(news[(currentAudioIndex + 1)% news.length])
     }
   }
 
