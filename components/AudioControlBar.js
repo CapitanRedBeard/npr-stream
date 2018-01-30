@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ProgressViewIOS } from 'react-native';
 import { Audio } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,13 +10,17 @@ export default class AudioControlBar extends React.Component {
     super(props)
     this.soundObject = new Audio.Sound();
     this.soundObject.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate)
+    this.state = {
+      progress: 0
+    }
   }
 
-  _onPlaybackStatusUpdate = ({didJustFinish}) => {
-    console.log("PlaybackStatus: ", didJustFinish, this.props)
+  _onPlaybackStatusUpdate = ({didJustFinish, durationMillis, positionMillis}) => {
+    console.log("PlaybackStatus: ", positionMillis, durationMillis)
     if(didJustFinish) {
       this.props.onFinished()
     }
+    this.setState({progress: positionMillis / durationMillis})
   }
 
   _playAudio = async ({links}) => {
@@ -26,6 +30,7 @@ export default class AudioControlBar extends React.Component {
         await this.soundObject.unloadAsync()
         await this.soundObject.loadAsync({ uri: audioFile });
         await this.soundObject.playAsync();
+        this.setState({progress: 0})
       } catch (error) {
         console.log("Something went wrong", error)
       }
@@ -69,14 +74,21 @@ export default class AudioControlBar extends React.Component {
 
   render() {
     const {attributes, isPlaying, onSelect, height} = this.props
-      return (
-        <View style={[styles.container, {height}]}>
+    const {progress} = this.state
+
+    return (
+      <View style={[styles.container, {height}]}>
+        <ProgressViewIOS
+          progress={progress}
+          progressTintColor={Colors.tintColor}
+        />
+        <View style={styles.infoWrapper}>
           <Text
             style={styles.title}
             numberOfLines={1}
             ellipsizeMode='tail'
           >{attributes.title}</Text>
-          <TouchableHighlight
+          <TouchableOpacity
             key="IconContainer"
             style={styles.symbolContainer}
             onPress={onSelect}>
@@ -84,20 +96,21 @@ export default class AudioControlBar extends React.Component {
               isPlaying ?
                 <Ionicons
                   name="ios-pause-outline"
-                  size={22}
+                  size={32}
                   style={styles.itemIcon}
                   color={Colors.tintColor}
                 /> :
                 <Ionicons
                   name="ios-play-outline"
-                  size={22}
+                  size={32}
                   style={styles.itemIcon}
                   color={Colors.tintColor}
                 />
             }
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
-      );
+      </View>
+    );
   }
 }
 
@@ -108,10 +121,14 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flex: 1,
+    flexDirection: "column",
+    backgroundColor: Colors.backgroundColorSecondary,
+  },
+  infoWrapper: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.backgroundColorSecondary,
   },
   title: {
     flex: 1,

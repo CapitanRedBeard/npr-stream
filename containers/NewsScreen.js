@@ -21,7 +21,7 @@ class NewsScreen extends React.Component {
     const {state: { params: { logout }}} = navigation
     return {
       title: 'News',
-      headerRight: <Button title={"Logout"} onPress={logout} />
+      headerRight: <Button title={"Logout"} onPress={logout} color={Colors.tintColor}/>
     }
   };
 
